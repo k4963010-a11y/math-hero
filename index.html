@@ -131,6 +131,19 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .stk{aspect-ratio:1;border-radius:26px;background:#fff;display:grid;place-items:center;font-size:clamp(46px,8vmin,72px);box-shadow:0 6px 0 rgba(59,42,92,.1)}
 .stk.no{background:rgba(255,255,255,.5);color:#D7CDE6;font:800 clamp(34px,6vmin,56px)/1 var(--f-disp);box-shadow:none;border:4px dashed #E6DDF2}
 
+/* ---------- boss gallery ---------- */
+#bossdex{background:radial-gradient(circle at 50% 0,#5A2A6B,#1E0F2E 70%);color:#fff}
+#bossdex .mapbar .who{color:#FFD23F}
+.dex{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(180px,26vmin,250px),1fr));gap:18px;margin-top:16px;padding-bottom:20px;align-content:start}
+.dexc{border:3px solid rgba(255,255,255,.15);border-radius:28px;background:rgba(255,255,255,.07);color:#fff;padding:14px 10px 16px;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.dexc svg{width:78%;height:auto;filter:drop-shadow(0 0 14px var(--aura,#fff))}
+.dexc.shadow svg{filter:none}
+.dexc b{font-size:clamp(20px,3vmin,26px);color:#FFD23F}
+.dexc span{font-size:clamp(13px,1.9vmin,16px);opacity:.75}
+.dexc em{font-style:normal;font-size:clamp(14px,2vmin,17px);background:rgba(255,255,255,.14);border-radius:99px;padding:3px 12px}
+.dexc.beat{border-color:#FFD23F;background:rgba(255,210,63,.12)}
+.dexc.beat em{background:#3DDC97;color:#0E3B26}
+
 /* ---------- battle ---------- */
 #game{overflow:hidden}
 #game.shake{animation:shake .5s 2}
@@ -324,6 +337,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
       <div class="who"><span class="mini" id="mapAv"></span><span id="mapName"></span></div>
       <span class="pill" id="mapWeapon"></span>
       <span class="pill" id="mapStars">⭐ 0</span>
+      <button class="round-btn" data-act="dex" aria-label="魔王圖鑑">👹</button>
       <button class="round-btn" data-act="book" aria-label="貼紙簿">📒</button>
     </div>
     <div id="mapScroll"><div class="mapcanvas" id="mapCanvas"></div></div>
@@ -337,6 +351,15 @@ h1,h2,h3{text-wrap:balance;margin:0}
     </div>
     <p style="margin:10px 0 14px;font-size:clamp(16px,2.4vmin,22px);color:var(--muted)">打倒每個世界的大魔王，就能打開寶箱拿貼紙！</p>
     <div class="stickers" id="stickers"></div>
+  </section>
+
+  <section id="bossdex" class="screen pad" hidden>
+    <div class="mapbar">
+      <button class="round-btn" data-act="map" aria-label="回地圖">⬅️</button>
+      <div class="who"><span>👑 魔王圖鑑</span></div>
+      <span class="pill" id="dexCount"></span>
+    </div>
+    <div class="dex" id="dex"></div>
   </section>
 
   <section id="game" class="screen" hidden>
@@ -553,66 +576,83 @@ const BOSSES = [
     <g transform="rotate(-22 46 160)"><rect x="37" y="58" width="18" height="106" rx="8" fill="#5D6170"/><circle cx="46" cy="62" r="18" fill="#6B6F7D"/>
       <polygon points="28,56 16,50 30,44" fill="#C9CED8"/><polygon points="64,56 76,50 62,44" fill="#C9CED8"/><polygon points="40,46 46,30 52,46" fill="#C9CED8"/><polygon points="28,70 16,76 30,80" fill="#C9CED8"/><polygon points="64,70 76,76 62,80" fill="#C9CED8"/></g>
     <ellipse cx="50" cy="160" rx="13" ry="12" fill="#9A6440"/></svg>` },
-  { name: '深海章魚王', title: '八隻觸手，拿著黃金三叉戟！', aura: '#3DB7FF', svg: () => `<svg viewBox="0 0 200 215" xmlns="http://www.w3.org/2000/svg">
-    <path d="M38 40 L44 205" stroke="#E0A100" stroke-width="6" stroke-linecap="round"/><path d="M24 44 L26 16 M38 40 L37 6 M52 42 L50 14 M24 44 Q38 52 52 42" stroke="#FFD23F" stroke-width="6" fill="none" stroke-linecap="round"/>
-    ${[0, 1, 2, 3, 4, 5].map(i => { const x = 52 + i * 19; return `<path d="M${x} 128 Q${x - 18 + i * 3} 172 ${x - 12 + i * 5} 206 Q${x + 4} 196 ${x + 16} 128Z" fill="#6A3BC0"/><circle cx="${x - 2 + i * 3}" cy="180" r="3" fill="#D9C2FF"/><circle cx="${x + i * 3}" cy="194" r="2.5" fill="#D9C2FF"/>`; }).join('')}
-    <path d="M36 128 Q24 30 100 22 Q176 30 164 128 Q100 150 36 128Z" fill="#8C5CF5"/>
-    <circle cx="140" cy="60" r="9" fill="#B48CFF"/><circle cx="150" cy="96" r="6" fill="#B48CFF"/><circle cx="56" cy="50" r="6" fill="#B48CFF"/>
-    <polygon points="70,32 76,4 90,24 100,-2 110,24 124,4 130,32" fill="#FFD23F" stroke="#E0A100" stroke-width="3"/><circle cx="100" cy="18" r="5" fill="#FF4D4D"/>
-    <circle cx="76" cy="84" r="19" fill="#fff"/><circle cx="124" cy="84" r="19" fill="#fff"/><circle cx="68" cy="88" r="9" fill="#1B0F33"/><circle cx="116" cy="88" r="9" fill="#1B0F33"/><circle cx="65" cy="84" r="3" fill="#fff"/><circle cx="113" cy="84" r="3" fill="#fff"/>
-    <path d="M52 56 L94 70 M148 56 L106 70" stroke="#2A1840" stroke-width="8" stroke-linecap="round"/>
-    <path d="M74 118 Q100 102 126 118" stroke="#2A1840" stroke-width="7" fill="none" stroke-linecap="round"/>
-    <path d="M42 112 Q30 120 38 130" stroke="#8C5CF5" stroke-width="12" fill="none" stroke-linecap="round"/></svg>` },
-  { name: '沙漠蠍子王', title: '巨大鉗子，尾巴有毒針！', aura: '#FFB13D', svg: () => `<svg viewBox="0 0 200 215" xmlns="http://www.w3.org/2000/svg">
-    ${[0, 1, 2, 3].map(i => `<path d="M${92 + i * 20} 168 L${80 + i * 22} 206" stroke="#A8641A" stroke-width="7" stroke-linecap="round"/>`).join('')}
-    <circle cx="164" cy="150" r="20" fill="#D98A2B"/><circle cx="180" cy="118" r="18" fill="#D98A2B"/><circle cx="182" cy="86" r="16" fill="#D98A2B"/><circle cx="170" cy="58" r="14" fill="#D98A2B"/><circle cx="150" cy="40" r="13" fill="#D98A2B"/>
-    <path d="M140 34 L108 22 L132 54Z" fill="#5A2E0A"/><circle cx="112" cy="25" r="4" fill="#9B3DFF"/>
-    <ellipse cx="118" cy="154" rx="58" ry="32" fill="#D98A2B"/><path d="M90 128 Q96 154 90 182 M114 124 Q120 154 114 186 M138 126 Q144 154 138 184" stroke="#A8641A" stroke-width="4" fill="none"/>
-    <path d="M56 150 L22 118" stroke="#D98A2B" stroke-width="16" stroke-linecap="round"/><path d="M58 166 L24 182" stroke="#D98A2B" stroke-width="16" stroke-linecap="round"/>
-    <path d="M30 120 Q-6 112 6 80 Q22 98 32 102Z" fill="#E8A040" stroke="#A8641A" stroke-width="3"/><path d="M30 120 Q2 134 0 108 Q16 114 30 110Z" fill="#E8A040" stroke="#A8641A" stroke-width="3"/>
-    <path d="M30 182 Q-4 172 4 146 Q18 162 30 166Z" fill="#E8A040" stroke="#A8641A" stroke-width="3"/><path d="M30 182 Q4 200 0 174 Q16 180 30 176Z" fill="#E8A040" stroke="#A8641A" stroke-width="3"/>
-    <ellipse cx="70" cy="146" rx="32" ry="26" fill="#E8A040"/>
-    <polygon points="52,122 56,104 64,118 72,100 78,118 86,104 90,122" fill="#FFD23F" stroke="#E0A100" stroke-width="2"/>
-    <circle cx="58" cy="138" r="11" fill="#fff"/><circle cx="82" cy="136" r="11" fill="#fff"/><circle cx="54" cy="141" r="6" fill="#2A1408"/><circle cx="78" cy="139" r="6" fill="#2A1408"/>
-    <path d="M44 126 L66 132 M96 124 L76 130" stroke="#5A2E0A" stroke-width="5" stroke-linecap="round"/>
-    <path d="M54 158 Q70 170 88 158Z" fill="#5A2E0A"/><polygon points="58,158 62,166 66,158" fill="#fff"/><polygon points="76,158 80,166 84,158" fill="#fff"/></svg>` },
-  { name: '火焰龍王', title: '會噴火的大紅龍！', aura: '#FF3D3D', svg: () => `<svg viewBox="0 0 200 215" xmlns="http://www.w3.org/2000/svg">
-    <path d="M116 100 L194 16 L184 70 L206 58 L182 110 L202 116 L148 146Z" fill="#8E1C1C"/>
-    <path d="M150 180 Q196 190 206 150 Q190 168 160 160Z" fill="#E53935"/>
-    <ellipse cx="80" cy="207" rx="18" ry="8" fill="#5A0E0E"/><ellipse cx="138" cy="207" rx="18" ry="8" fill="#5A0E0E"/>
-    <ellipse cx="114" cy="164" rx="52" ry="42" fill="#E53935"/><ellipse cx="104" cy="172" rx="30" ry="30" fill="#FFC14D"/>
-    <path d="M86 160 h36 M84 174 h40 M88 188 h32" stroke="#E0A100" stroke-width="3"/>
-    <path d="M92 132 Q74 104 82 80 L120 82 Q116 112 130 132Z" fill="#E53935"/>
-    <polygon points="124,90 138,80 132,96 146,92 136,108" fill="#8E1C1C"/>
-    <path d="M104 46 Q118 6 152 10 Q124 24 120 52Z" fill="#FFE08A" stroke="#D9B04A" stroke-width="2"/><path d="M90 46 Q96 12 124 4 Q102 22 104 50Z" fill="#FFE08A" stroke="#D9B04A" stroke-width="2"/>
-    <path d="M34 72 Q44 40 98 42 Q132 46 128 80 Q122 104 92 104 L36 96 Q18 84 34 72Z" fill="#E53935"/>
-    <ellipse cx="84" cy="64" rx="12" ry="9" fill="#FFE14D"/><ellipse cx="81" cy="64" rx="3" ry="8" fill="#2A0A0A"/>
-    <path d="M66 50 L98 56" stroke="#5A0E0E" stroke-width="6" stroke-linecap="round"/>
-    <circle cx="40" cy="76" r="4" fill="#5A0E0E"/><path d="M38 66 q-8 -10 0 -18 q4 8 10 4" stroke="#bbb" stroke-width="3" fill="none" opacity=".7"/>
-    <path d="M36 96 L92 102" stroke="#5A0E0E" stroke-width="3"/><polygon points="46,96 50,106 54,97" fill="#fff"/><polygon points="62,98 66,108 70,99" fill="#fff"/><polygon points="78,100 82,110 86,101" fill="#fff"/>
-    <path d="M30 88 Q8 70 -8 88 Q8 92 -10 108 Q14 104 30 96Z" fill="#FFB13D"/><path d="M28 90 Q14 82 4 92 Q14 94 4 102 Q18 100 28 94Z" fill="#FFE14D"/></svg>` },
-  { name: '冰雪巨人', title: '冰角巨人，一拳把地打裂！', aura: '#7FE0FF', svg: () => `<svg viewBox="0 0 200 215" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="78" cy="207" rx="22" ry="9" fill="#9FC9E6"/><ellipse cx="142" cy="207" rx="22" ry="9" fill="#9FC9E6"/>
-    ${[[60, 110], [150, 108], [52, 150], [160, 150], [70, 186], [140, 188], [105, 196]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="22" fill="#F4FBFF"/>`).join('')}
-    <ellipse cx="106" cy="148" rx="62" ry="60" fill="#F4FBFF"/>
-    <circle cx="34" cy="96" r="24" fill="#F4FBFF"/><circle cx="26" cy="74" r="18" fill="#9FD4F5"/>
-    <polygon points="62,52 44,4 80,40" fill="#7FE0FF" stroke="#3DB7FF" stroke-width="2"/><polygon points="140,52 162,4 124,40" fill="#7FE0FF" stroke="#3DB7FF" stroke-width="2"/>
-    <circle cx="100" cy="60" r="44" fill="#F4FBFF"/>
-    <ellipse cx="96" cy="76" rx="36" ry="32" fill="#9FD4F5"/>
-    <circle cx="80" cy="66" r="10" fill="#fff"/><circle cx="110" cy="66" r="10" fill="#fff"/><circle cx="76" cy="68" r="5.5" fill="#0E2A44"/><circle cx="106" cy="68" r="5.5" fill="#0E2A44"/>
-    <path d="M64 52 L90 60 M126 52 L102 60" stroke="#0E2A44" stroke-width="6" stroke-linecap="round"/>
-    <path d="M74 90 Q96 110 118 90Z" fill="#0E2A44"/><polygon points="80,90 84,100 88,91" fill="#fff"/><polygon points="104,91 108,100 112,90" fill="#fff"/>
-    <polygon points="160,130 176,104 182,132" fill="#BFF3FF" stroke="#3DB7FF" stroke-width="2"/><polygon points="38,170 30,146 50,162" fill="#BFF3FF" stroke="#3DB7FF" stroke-width="2"/></svg>` },
-  { name: '暗黑魔王', title: '最後的大魔王，小心黑暗魔法！', aura: '#B05CFF', svg: () => `<svg viewBox="0 0 200 215" xmlns="http://www.w3.org/2000/svg">
-    <path d="M32 50 L40 210" stroke="#6B4A2E" stroke-width="7" stroke-linecap="round"/><circle cx="32" cy="40" r="18" fill="#B05CFF"/><circle cx="28" cy="35" r="6" fill="#F1D9FF"/>
-    <path d="M58 64 Q100 42 142 64 L182 212 L18 212Z" fill="#2E2260"/><path d="M76 74 Q100 64 124 74 L140 212 L60 212Z" fill="#4B3A8C"/>
-    <path d="M140 212 Q150 190 160 212 Q168 192 178 212" fill="#B05CFF" opacity=".7"/><path d="M22 212 Q30 192 40 212 Q48 194 56 212" fill="#B05CFF" opacity=".7"/>
-    <path d="M70 50 Q24 34 30 -6 Q46 30 84 38Z" fill="#D9D2E9" stroke="#8E86A0" stroke-width="2"/><path d="M130 50 Q176 34 170 -6 Q154 30 116 38Z" fill="#D9D2E9" stroke="#8E86A0" stroke-width="2"/>
-    <circle cx="100" cy="64" r="36" fill="#1A1033"/>
-    <ellipse cx="86" cy="62" rx="10" ry="6" fill="#FF3D3D"/><ellipse cx="114" cy="62" rx="10" ry="6" fill="#FF3D3D"/><ellipse cx="86" cy="62" rx="4" ry="5" fill="#FFE14D"/><ellipse cx="114" cy="62" rx="4" ry="5" fill="#FFE14D"/>
-    <path d="M80 84 l6 6 l6 -6 l6 6 l6 -6 l6 6 l6 -6" stroke="#FF3D3D" stroke-width="3" fill="none"/>
-    <polygon points="70,30 78,12 88,26 100,6 112,26 122,12 130,30" fill="#7E64D9" stroke="#B05CFF" stroke-width="2"/>
-    <circle cx="46" cy="112" r="12" fill="#1A1033"/><path d="M58 96 Q48 104 46 112" stroke="#2E2260" stroke-width="16" fill="none" stroke-linecap="round"/></svg>` },
+  { name: '瑜珈女妖', title: '一邊做瑜珈，一邊施魔法！', aura: '#FF6FD8', svg: () => `<svg viewBox="0 0 200 215" xmlns="http://www.w3.org/2000/svg">
+    <rect x="34" y="198" width="136" height="11" rx="5" fill="#FF6FA8"/><rect x="34" y="198" width="136" height="4" rx="2" fill="#FF9EC7"/>
+    <path d="M70 46 Q62 112 50 142 Q80 128 100 116 Q120 128 150 142 Q138 112 130 46Z" fill="#7B2FBF"/>
+    <path d="M86 84 Q74 46 94 16" stroke="#8EE0A8" stroke-width="11" fill="none" stroke-linecap="round"/><path d="M114 84 Q126 46 106 16" stroke="#8EE0A8" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <ellipse cx="100" cy="13" rx="10" ry="8" fill="#8EE0A8"/>
+    <path d="M92 130 L94 200 L106 200 L108 130Z" fill="#3B2A5C"/>
+    <path d="M104 134 L140 150 L132 164 L104 160Z" fill="#3B2A5C"/><path d="M138 156 L110 172" stroke="#3B2A5C" stroke-width="13" stroke-linecap="round"/><ellipse cx="106" cy="172" rx="8" ry="6" fill="#8EE0A8"/>
+    <ellipse cx="100" cy="202" rx="12" ry="5" fill="#8EE0A8"/>
+    <path d="M82 80 Q100 72 118 80 L114 112 L86 112Z" fill="#FF4D8F"/><rect x="88" y="112" width="24" height="9" fill="#8EE0A8"/><path d="M86 120 L114 120 L110 136 L90 136Z" fill="#3B2A5C"/>
+    <rect x="94" y="68" width="12" height="14" fill="#8EE0A8"/>
+    <polygon points="84,36 78,16 93,29" fill="#4B1F6B"/><polygon points="116,36 122,16 107,29" fill="#4B1F6B"/>
+    <circle cx="100" cy="52" r="22" fill="#8EE0A8"/>
+    <path d="M77 52 Q78 25 100 27 Q123 25 123 52 Q112 36 100 40 Q88 36 77 52Z" fill="#7B2FBF"/>
+    <path d="M79 42 Q100 31 121 42" stroke="#FF6FA8" stroke-width="4" fill="none"/>
+    <path d="M83 53 Q89 47 96 53 Q89 57 83 53Z" fill="#FFE14D"/><path d="M104 53 Q111 47 117 53 Q111 57 104 53Z" fill="#FFE14D"/>
+    <ellipse cx="88" cy="53" rx="1.8" ry="3.6" fill="#2A0A2A"/><ellipse cx="109" cy="53" rx="1.8" ry="3.6" fill="#2A0A2A"/>
+    <path d="M83 50 l-3 -3 M96 49 l2 -3 M104 49 l-2 -3 M117 50 l3 -3" stroke="#2A0A2A" stroke-width="1.6"/>
+    <path d="M80 45 L96 48 M120 45 L104 48" stroke="#4B1F6B" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M91 63 Q100 69 109 61" stroke="#C9184A" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <ellipse cx="84" cy="60" rx="4" ry="2.5" fill="#FF6FA8" opacity=".5"/><ellipse cx="116" cy="60" rx="4" ry="2.5" fill="#FF6FA8" opacity=".5"/>
+    ${[[40, 60], [160, 72], [30, 130], [172, 124], [152, 28]].map(([x, y]) => `<path d="M${x} ${y - 9} L${x + 2} ${y - 2} L${x + 9} ${y} L${x + 2} ${y + 2} L${x} ${y + 9} L${x - 2} ${y + 2} L${x - 9} ${y} L${x - 2} ${y - 2}Z" fill="#FFD6F5"/>`).join('')}
+  </svg>` },
+  { name: '羅羅睡眠王', title: '躺在躺椅上睡得超舒服，吵醒他就慘了！', aura: '#8C9CFF', svg: () => `<svg viewBox="0 0 200 215" xmlns="http://www.w3.org/2000/svg">
+    <rect x="46" y="186" width="10" height="22" rx="3" fill="#5A3A1E"/><rect x="164" y="186" width="10" height="22" rx="3" fill="#5A3A1E"/><rect x="18" y="166" width="8" height="40" rx="3" fill="#5A3A1E"/>
+    <path d="M134 50 Q172 36 188 64 L192 176 L144 176Z" fill="#A0673A"/><path d="M146 60 Q170 52 180 72 L182 168 L152 168Z" fill="#B97A48"/>
+    <rect x="40" y="160" width="152" height="30" rx="14" fill="#8B5A2B"/><rect x="8" y="146" width="74" height="24" rx="11" fill="#A0673A"/>
+    <ellipse cx="160" cy="94" rx="28" ry="17" fill="#fff"/>
+    <path d="M92 142 Q62 140 32 132" stroke="#4E7BD9" stroke-width="22" stroke-linecap="round"/><path d="M94 152 Q64 154 34 150" stroke="#3E68C2" stroke-width="20" stroke-linecap="round"/>
+    <ellipse cx="22" cy="131" rx="13" ry="9" fill="#E8414A"/><ellipse cx="24" cy="150" rx="13" ry="9" fill="#E8414A"/>
+    <ellipse cx="116" cy="132" rx="46" ry="33" fill="#6EA8FF" transform="rotate(-14 116 132)"/>
+    <path d="M80 128 L152 110 M84 142 L156 124 M92 154 L152 140" stroke="#fff" stroke-width="3" opacity=".55"/>
+    <circle cx="112" cy="126" r="3" fill="#fff"/><circle cx="118" cy="140" r="3" fill="#fff"/>
+    <path d="M128 110 Q118 128 98 134" stroke="#6EA8FF" stroke-width="13" fill="none" stroke-linecap="round"/><circle cx="96" cy="135" r="8" fill="#FFD3A8"/>
+    <circle cx="150" cy="88" r="27" fill="#FFD3A8"/><ellipse cx="174" cy="92" rx="6" ry="8" fill="#FFD3A8"/>
+    <path d="M124 82 Q128 52 166 56 Q180 60 178 78Z" fill="#3E68C2"/><path d="M130 62 Q106 52 98 72" stroke="#3E68C2" stroke-width="11" fill="none" stroke-linecap="round"/><circle cx="97" cy="75" r="8" fill="#fff"/>
+    <path d="M124 82 Q150 72 178 78" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <polygon points="146,60 150,46 156,55 162,42 167,55 173,48 173,63 146,65" fill="#FFD23F" stroke="#E0A100" stroke-width="2"/>
+    <path d="M132 88 q6 5 12 0 M152 86 q6 5 12 0" stroke="#3B2A2A" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <ellipse cx="134" cy="96" rx="5" ry="3" fill="#FF8A8A" opacity=".5"/><ellipse cx="166" cy="95" rx="5" ry="3" fill="#FF8A8A" opacity=".5"/>
+    <path d="M138 101 q7 -6 13 0 q6 -6 13 0" stroke="#5A3A1E" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="150" cy="108" rx="5" ry="4" fill="#8E2A2A"/>
+    <circle cx="139" cy="112" r="8" fill="#BFE8FF" stroke="#7FC8FF" stroke-width="1.5" opacity=".9"/><circle cx="136" cy="109" r="2" fill="#fff"/>
+    <text x="100" y="42" font-size="28" font-weight="900" fill="#5E4BC7" font-family="sans-serif">Z</text><text x="78" y="22" font-size="21" font-weight="900" fill="#5E4BC7" font-family="sans-serif">z</text><text x="62" y="6" font-size="16" font-weight="900" fill="#5E4BC7" font-family="sans-serif">z</text>
+  </svg>` },
+  { name: '亮亮可憐王', title: '看起來好可憐……但不能心軟喔！', aura: '#7FC8FF', svg: () => `<svg viewBox="0 0 200 215" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="80" cy="208" rx="18" ry="7" fill="#2A2A3A"/><ellipse cx="122" cy="208" rx="18" ry="7" fill="#2A2A3A"/>
+    <path d="M68 170 L72 205 L96 205 L100 178 L104 205 L128 205 L132 170Z" fill="#4A4F66"/>
+    <path d="M60 116 Q100 102 140 116 L148 176 Q100 190 52 176Z" fill="#EEF2FF"/>
+    <ellipse cx="100" cy="160" rx="44" ry="23" fill="#E3E8F8"/>
+    <path d="M100 116 L92 138 L102 166 L110 138Z" fill="#E8414A" transform="rotate(16 100 140)"/>
+    <path d="M140 124 Q158 156 148 182" stroke="#EEF2FF" stroke-width="16" fill="none" stroke-linecap="round"/><circle cx="148" cy="184" r="9" fill="#F5C9A0"/>
+    <path d="M62 122 Q38 108 56 84" stroke="#EEF2FF" stroke-width="16" fill="none" stroke-linecap="round"/><circle cx="58" cy="80" r="9" fill="#F5C9A0"/>
+    <rect x="90" y="98" width="20" height="16" fill="#F5C9A0"/>
+    <ellipse cx="65" cy="70" rx="7" ry="11" fill="#F5C9A0"/><ellipse cx="135" cy="70" rx="7" ry="11" fill="#F5C9A0"/>
+    <ellipse cx="100" cy="66" rx="36" ry="40" fill="#F5C9A0"/>
+    <path d="M67 60 Q64 76 71 86 M133 60 Q136 76 129 86" stroke="#9A9AA8" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M97 27 q-5 -10 3 -13 M103 26 q2 -12 10 -8 M91 29 q-8 -6 -4 -14" stroke="#5A5A66" stroke-width="2" fill="none"/>
+    <ellipse cx="86" cy="40" rx="13" ry="7" fill="#fff" opacity=".8" transform="rotate(-25 86 40)"/>
+    <path d="M118 26 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2 l6 -2Z" fill="#FFF6A8"/><path d="M70 30 l1.5 4 l4 1.5 l-4 1.5 l-1.5 4 l-1.5 -4 l-4 -1.5 l4 -1.5Z" fill="#FFF6A8"/>
+    <polygon points="112,32 115,20 121,28 127,18 130,34" fill="#FFD23F" stroke="#E0A100" stroke-width="2" transform="rotate(22 121 27)"/>
+    <path d="M73 57 L92 49 M127 57 L108 49" stroke="#5A5A66" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="86" cy="66" r="11.5" fill="#fff"/><circle cx="114" cy="66" r="11.5" fill="#fff"/>
+    <circle cx="84" cy="68" r="7.5" fill="#2A2A3A"/><circle cx="112" cy="68" r="7.5" fill="#2A2A3A"/>
+    <circle cx="81" cy="64" r="3.2" fill="#fff"/><circle cx="109" cy="64" r="3.2" fill="#fff"/><circle cx="86" cy="72" r="1.6" fill="#fff"/><circle cx="114" cy="72" r="1.6" fill="#fff"/>
+    <path d="M75 75 Q86 81 97 75 M103 75 Q114 81 125 75" stroke="#7FC8FF" stroke-width="3" fill="none"/>
+    <path d="M78 79 Q74 94 79 108" stroke="#7FC8FF" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/><path d="M122 79 Q126 94 121 108" stroke="#7FC8FF" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/>
+    <ellipse cx="100" cy="81" rx="5" ry="4" fill="#E8A880"/>
+    <path d="M86 97 q4 -6 8 -2 q3 -5 6 -1 q3 -5 6 1 q4 -4 8 2" stroke="#7A3A2A" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M44 64 Q40 52 52 54 Q56 46 64 54 Q72 56 66 66 Q60 76 48 72Z" fill="#fff" stroke="#D6DCEB" stroke-width="1.5"/>
+    <text x="146" y="46" font-size="18" font-weight="900" fill="#3D7BFF" font-family="sans-serif">嗚嗚～</text>
+  </svg>` },
+  ...[0, 1].map(() => ({ name: '神秘魔王', title: '還沒現身的魔王，看不清楚牠的樣子……', aura: '#6B6B80', shadow: true, svg: () => `<svg viewBox="0 0 200 215" xmlns="http://www.w3.org/2000/svg">
+    <path d="M58 62 Q38 22 54 0 Q62 30 82 46Z" fill="#111"/><path d="M142 62 Q162 22 146 0 Q138 30 118 46Z" fill="#111"/>
+    <path d="M30 212 Q20 120 54 74 Q100 30 146 74 Q180 120 170 212 Q150 196 134 212 Q118 196 100 212 Q82 196 66 212 Q50 196 30 212Z" fill="#111"/>
+    <path d="M32 122 Q6 98 14 70 Q26 96 46 104Z" fill="#111"/><path d="M168 122 Q194 98 186 70 Q174 96 154 104Z" fill="#111"/>
+    <ellipse cx="82" cy="98" rx="11" ry="6" fill="#fff" opacity=".9"/><ellipse cx="118" cy="98" rx="11" ry="6" fill="#fff" opacity=".9"/>
+    <text x="100" y="170" font-size="58" font-weight="900" text-anchor="middle" fill="#3A3A48" font-family="sans-serif">?</text></svg>` })),
 ];
 const STICKERS = ['🦄','🚀','🐳','🌈','🍩','🦁','🐙','🎈','🍉','🐼','🦋','🍭','🐸','🚒','🦕','🍦','🐝','🦖','🍓','🚂','🐧','🎠','🦒','🌟'];
 const FRUITS = [['🍎','蘋果'],['🍓','草莓'],['🐟','小魚'],['⭐','星星'],['🍪','餅乾'],['🐥','小雞'],['🍌','香蕉'],['🐞','瓢蟲']];
@@ -1060,6 +1100,28 @@ function openBook() {
   show('book');
 }
 
+function openDex() {
+  const k = P[cur], W = WORLDS[k.grade];
+  let beat = 0;
+  $('#dex').innerHTML = W.map((Wd, wi) => {
+    const b = BOSSES[wi % BOSSES.length], done = !!k.stars[lvKey(k, wi, Wd.levels.length - 1)];
+    if (done) beat++;
+    return `<button class="dexc${done ? ' beat' : ''}${b.shadow ? ' shadow' : ''}" data-dex="${wi}" style="--aura:${b.aura}">${b.svg()}
+      <b>${b.shadow ? '？？？' : b.name}</b><span>世界 ${wi + 1}・${Wd.name}</span><em>${done ? '✅ 已打倒' : '⚔️ 等你挑戰'}</em></button>`;
+  }).join('');
+  $('#dexCount').textContent = `已打倒 ${beat} / ${W.length}`;
+  $('#dex').querySelectorAll('[data-dex]').forEach(c => c.onclick = () => {
+    const wi = +c.dataset.dex, b = BOSSES[wi % BOSSES.length], done = c.classList.contains('beat');
+    SFX.bossRoar();
+    overlay(`<div class="bossbig">${b.svg()}</div><h2>${b.shadow ? '？？？' : b.name}</h2>
+      <p>${b.title}<br>住在：世界 ${wi + 1}・${W[wi].name}${done ? '<br>✅ 你已經打倒牠了！' : ''}</p>
+      <div class="row"><button class="btn ghost" data-act="dexclose">關閉</button></div>`, 'bossin');
+    $('#ov').classList.add('dark');
+    say(b.shadow ? '神秘魔王，還看不清楚牠的樣子' : `${b.name}，${b.title}`);
+  });
+  show('bossdex');
+}
+
 /* ================= battle ================= */
 let G = null, rafId = 0, lastT = 0;
 function buildScene(theme) {
@@ -1393,6 +1455,8 @@ document.addEventListener('click', e => {
     case 'home': stopGame(); renderHome(); break;
     case 'map': stopGame(); openMap(); break;
     case 'book': openBook(); break;
+    case 'dex': openDex(); break;
+    case 'dexclose': $('#ov').hidden = true; $('#ov').className = ''; try { speechSynthesis.cancel(); } catch (e) {} break;
     case 'go': go(); break;
     case 'speak': say(lastSay); break;
     case 'pause': pause(); break;
@@ -1465,5 +1529,6 @@ function openParent() {
 
 renderHome();
 </script>
+
 </body>
 </html>
